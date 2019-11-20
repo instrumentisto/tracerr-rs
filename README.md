@@ -1,6 +1,13 @@
 tracerr
 =======
 
+[![Latest version](https://img.shields.io/crates/v/tracerr)](https://crates.io/crates/tracerr)
+![License](https://img.shields.io/crates/l/tracerr)
+[![Rust docs](https://img.shields.io/badge/api-rustdoc-blue.svg)](https://docs.rs/tracerr)
+
+[API Docs](https://docs.rs/tracerr) |
+[Changelog](https://github.com/instrumentisto/tracerr-rs/blob/master/CHANGELOG.md)
+
 Custom compile time captured error tracing for [Rust].
 
 
