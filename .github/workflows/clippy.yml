@@ -1,0 +1,29 @@
+name: Clippy
+
+on:
+  push:
+    paths: ["src/**", "Cargo.toml"]
+  pull_request:
+    paths: ["src/**", "Cargo.toml"]
+
+jobs:
+  clippy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+        with:
+          ref: ${{ github.ref }}
+
+      - name: Lint without "failure" feature
+        uses: actions-rs/clippy-check@v1
+        with:
+          name: no "failure"
+          args: -- -D clippy::pedantic -D warnings
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Lint with "failure" feature
+        uses: actions-rs/clippy-check@v1
+        with:
+          name: with "failure"
+          args: --features failure -- -D clippy::pedantic -D warnings
+          token: ${{ secrets.GITHUB_TOKEN }}

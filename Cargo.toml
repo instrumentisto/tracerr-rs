@@ -9,7 +9,7 @@ documentation = "https://docs.rs/tracerr"
 homepage = "https://github.com/instrumentisto/tracerr-rs"
 repository = "https://github.com/instrumentisto/tracerr-rs"
 readme = "README.md"
-keywords = ["backtrace", "error", "stacktrace", "tracing"]
+keywords = ["backtrace", "error", "stacktrace", "tracing", "tracerr"]
 categories = []
 include = ["/src/", "/Cargo.toml", "/CHANGELOG.md", "/LICENSE.md", "/README.md"]
 
