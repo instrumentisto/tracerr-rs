@@ -15,4 +15,8 @@ include = ["/src/", "/Cargo.toml", "/CHANGELOG.md", "/LICENSE.md", "/README.md"]
 
 [dependencies]
 dm = { version = "0.99.2", package = "derive_more" }
-failure = { version = "0.1", optional = true }
+[dependencies.failure]
+    version = "0.1.6"
+    optional = true
+    default-features = false
+    features = ["backtrace"]

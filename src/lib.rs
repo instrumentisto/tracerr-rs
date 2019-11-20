@@ -41,6 +41,7 @@
 //! ```
 
 #![deny(
+    intra_doc_link_resolution_failure,
     missing_debug_implementations,
     nonstandard_style,
     rust_2018_idioms,
@@ -162,6 +163,8 @@ impl<E: Error> Error for Traced<E> {
 }
 
 #[cfg(feature = "failure")]
+/// ![feature: failure](https://img.shields.io/badge/feature-failure-blue.svg)
+/// [`Fail`] implementation for [`Traced`].
 impl<E: Fail> Fail for Traced<E> {
     #[inline]
     fn name(&self) -> Option<&str> {
@@ -181,6 +184,8 @@ impl<E: Fail> Fail for Traced<E> {
 
 #[cfg(feature = "failure")]
 #[allow(clippy::use_self)]
+/// ![feature: failure](https://img.shields.io/badge/feature-failure-blue.svg)
+/// Easy conversion into [`Box`]ed [`Fail`] for [`Traced`] errors.
 impl<E: Fail> From<Traced<E>> for Box<dyn Fail> {
     #[inline]
     fn from(err: Traced<E>) -> Self {
