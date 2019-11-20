@@ -1,7 +1,17 @@
 [package]
 name = "tracerr"
 version = "0.1.0"
-authors = ["Instrumentisto Team <developer@instrumentisto.com>"]
 edition = "2018"
+description = "Custom compile time captured error tracing"
+authors = ["Instrumentisto Team <developer@instrumentisto.com>"]
+documentation = "https://docs.rs/tracerr"
+homepage = "https://github.com/instrumentisto/tracerr"
+repository = "https://github.com/instrumentisto/tracerr"
+readme = "README.md"
+keywords = ["backtrace", "error", "stacktrace", "tracing"]
+categories = []
+include = ["/src/", "/Cargo.toml", "/CHANGELOG.md", "/LICENSE.md", "/README.md"]
 
 [dependencies]
+dm = { version = "0.99.2", package = "derive_more" }
+failure = { version = "0.1", optional = true }
