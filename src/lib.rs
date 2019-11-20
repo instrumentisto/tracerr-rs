@@ -18,6 +18,7 @@
 //!     .map_err(tracerr::wrap!()); // captures frame
 //!
 //! let err: Traced<&'static str> = res.unwrap_err();
+//! # #[cfg(not(target_os = "windows"))]
 //! assert_eq!(
 //!     format!("{}\n{}", err, err.trace()),
 //!     r"my error
@@ -29,6 +30,7 @@
 //! );
 //!
 //! let (val, trace) = err.into_parts();
+//! # #[cfg(not(target_os = "windows"))]
 //! assert_eq!(
 //!     format!("{}\n{}", val, trace),
 //!     r"my error
