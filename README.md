@@ -4,7 +4,7 @@ tracerr
 [![Latest version](https://img.shields.io/crates/v/tracerr)](https://crates.io/crates/tracerr)
 ![License](https://img.shields.io/crates/l/tracerr)
 ![Unsafe forbidden](https://img.shields.io/badge/unsafe-forbidden-success.svg)
-[![Rust docs](https://img.shields.io/badge/api-rustdoc-blue.svg)](https://docs.rs/tracerr)
+[![Rust docs](https://docs.rs/tracerr/badge.svg)](https://docs.rs/tracerr)
 
 [API Docs](https://docs.rs/tracerr) |
 [Changelog](https://github.com/instrumentisto/tracerr-rs/blob/master/CHANGELOG.md)

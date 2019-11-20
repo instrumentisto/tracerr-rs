@@ -13,6 +13,9 @@ keywords = ["backtrace", "error", "stacktrace", "tracing", "tracerr"]
 categories = []
 include = ["/src/", "/Cargo.toml", "/CHANGELOG.md", "/LICENSE.md", "/README.md"]
 
+[package.metadata.docs.rs]
+features = ["failure"]
+
 [dependencies]
 dm = { version = "0.99.2", package = "derive_more" }
 [dependencies.failure]

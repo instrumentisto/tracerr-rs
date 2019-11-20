@@ -12,6 +12,11 @@ jobs:
         with:
           ref: ${{ github.ref }}
 
+      - uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          override: true
+
       - name: Parse release version
         id: release
         run: |
@@ -37,3 +42,9 @@ jobs:
             [API Docs](https://docs.rs/tracerr/${{ steps.release.outputs.VERSION }})
             [Changelog](${{ steps.changelog.outputs.LINK }})
           prerelease: ${{ contains(steps.release.outputs.VERSION, '-') }}
+
+      - name: Release on crates.io
+        uses: actions-rs/cargo@v1
+        with:
+          command: publish
+          args: --token ${{ secrets.CRATES_IO_TOKEN }}
