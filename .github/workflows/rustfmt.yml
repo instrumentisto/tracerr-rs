@@ -2,6 +2,7 @@ name: Rustfmt
 
 on:
   push:
+    tags-ignore: ["v*"]
     paths: ["src/**", ".rustfmt.toml"]
   pull_request:
     paths: ["src/**", ".rustfmt.toml"]

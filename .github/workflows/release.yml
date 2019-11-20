@@ -1,0 +1,39 @@
+name: Release
+
+on:
+  push:
+    tags: ["v*"]
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+        with:
+          ref: ${{ github.ref }}
+
+      - name: Parse release version
+        id: release
+        run: |
+          echo ::set-output name=VERSION::${GITHUB_REF#refs/tags/v}
+
+      - name: Parse CHANGELOG link
+        id: changelog
+        run: |
+          echo ::set-output name=LINK::https://github.com/${{ github.repository }}/blob/v${{ steps.release.outputs.VERSION }}/CHANGELOG.md#$(sed -n '/^## \[${{ steps.release.outputs.VERSION }}\]/{s/^## \[\(.*\)\][^0-9]*\([0-9].*\)/\1--\2/;s/[^0-9a-z-]*//g;p;}' CHANGELOG.md)
+
+      - name: Verify release version matches Cargo manifest
+        run: |
+          test "${{ steps.release.outputs.VERSION }}" == "$(grep -m1 'version = "' Cargo.toml | cut -d '"' -f2)"
+
+      - name: Release on GitHub
+        uses: actions/create-release@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: ${{ steps.release.outputs.VERSION }}
+          body: |
+            [API Docs](https://docs.rs/tracerr/${{ steps.release.outputs.VERSION }})
+            [Changelog](${{ steps.changelog.outputs.LINK }})
+          prerelease: ${{ contains(steps.release.outputs.VERSION, '-') }}

@@ -2,6 +2,7 @@ name: Test
 
 on:
   push:
+    tags-ignore: ["v*"]
     paths: ["src/**", "Cargo.toml"]
   pull_request:
     paths: ["src/**", "Cargo.toml"]
