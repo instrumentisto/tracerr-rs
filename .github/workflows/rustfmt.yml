@@ -1,0 +1,27 @@
+name: Rustfmt
+
+on:
+  push:
+    paths: ["src/**", ".rustfmt.toml"]
+  pull_request:
+    paths: ["src/**", ".rustfmt.toml"]
+
+jobs:
+  rustfmt:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+        with:
+          ref: ${{ github.ref }}
+
+      - uses: actions-rs/toolchain@v1
+        with:
+          toolchain: nightly
+          components: rustfmt
+          override: true
+
+      - name: Check rustfmt formatting
+        uses: actions-rs/cargo@v1
+        with:
+          command: fmt
+          args: --all -- --check
