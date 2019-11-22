@@ -6,6 +6,18 @@ All user visible changes to this project will be documented in this file. This p
 
 
 
+## [0.1.1] · 2019-11-22
+[0.1.1]: /../../tree/v0.1.1
+
+[Diff](/../../compare/v0.1.0...v0.1.1)
+
+### Fixed
+
+- [ICE](https://github.com/rust-lang/rust/issues/64450) when building on `wasm32-unknown-unknown` target ([#1](/../../pull/1)).
+
+
+
+
 ## [0.1.0] · 2019-11-20
 [0.1.0]: /../../tree/v0.1.0
 
