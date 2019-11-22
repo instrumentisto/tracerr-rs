@@ -72,6 +72,7 @@ use std::{
     sync::atomic::{AtomicUsize, Ordering},
 };
 
+use derive_more as dm;
 #[cfg(feature = "failure")]
 use failure::Fail;
 

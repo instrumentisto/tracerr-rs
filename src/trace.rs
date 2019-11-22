@@ -5,6 +5,8 @@ use std::{
     ops::{Deref, DerefMut},
 };
 
+use derive_more as dm;
+
 /// Captured frame of [`Trace`].
 #[derive(Clone, Copy, Debug, dm::Display)]
 #[display(fmt = "{}\n  at {}:{}", module, file, line)]

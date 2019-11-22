@@ -17,7 +17,7 @@ include = ["/src/", "/Cargo.toml", "/CHANGELOG.md", "/LICENSE.md", "/README.md"]
 features = ["failure"]
 
 [dependencies]
-dm = { version = "0.99.2", package = "derive_more" }
+derive_more = "0.99.2"
 [dependencies.failure]
     version = "0.1.6"
     optional = true
