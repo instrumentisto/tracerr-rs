@@ -43,7 +43,7 @@
 //! ```
 
 #![deny(
-    intra_doc_link_resolution_failure,
+    broken_intra_doc_links,
     missing_debug_implementations,
     nonstandard_style,
     rust_2018_idioms,
