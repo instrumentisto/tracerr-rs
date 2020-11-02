@@ -86,7 +86,7 @@ pub static DEFAULT_FRAMES_CAPACITY: AtomicUsize = AtomicUsize::new(10);
 
 /// Transparent wrapper for an error which holds captured error trace
 /// along with it.
-#[derive(Debug, dm::Display)]
+#[derive(Clone, Debug, dm::Display)]
 #[display(fmt = "{}", err)]
 pub struct Traced<E> {
     /// Original error.
