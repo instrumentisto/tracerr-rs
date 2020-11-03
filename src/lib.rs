@@ -43,7 +43,7 @@
 //! ```
 
 #![deny(
-    intra_doc_link_resolution_failure,
+    broken_intra_doc_links,
     missing_debug_implementations,
     nonstandard_style,
     rust_2018_idioms,
@@ -86,7 +86,7 @@ pub static DEFAULT_FRAMES_CAPACITY: AtomicUsize = AtomicUsize::new(10);
 
 /// Transparent wrapper for an error which holds captured error trace
 /// along with it.
-#[derive(Debug, dm::Display)]
+#[derive(Clone, Debug, dm::Display)]
 #[display(fmt = "{}", err)]
 pub struct Traced<E> {
     /// Original error.
