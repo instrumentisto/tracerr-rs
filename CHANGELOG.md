@@ -6,6 +6,18 @@ All user visible changes to this project will be documented in this file. This p
 
 
 
+## [0.1.2] · 2020-11-03
+[0.1.2]: /../../tree/v0.1.2
+
+[Diff](/../../compare/v0.1.1...v0.1.2)
+
+### Added
+
+- `Clone` implementation for `Traced` ([#3](/../../pull/3)).
+
+
+
+
 ## [0.1.1] · 2019-11-22
 [0.1.1]: /../../tree/v0.1.1
 

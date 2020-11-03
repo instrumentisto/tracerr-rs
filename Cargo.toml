@@ -1,6 +1,6 @@
 [package]
 name = "tracerr"
-version = "0.1.1"
+version = "0.1.2"
 edition = "2018"
 description = "Custom compile time captured error tracing"
 authors = ["Instrumentisto Team <developer@instrumentisto.com>"]
