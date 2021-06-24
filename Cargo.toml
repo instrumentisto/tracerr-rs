@@ -1,7 +1,8 @@
 [package]
 name = "tracerr"
-version = "0.1.2"
+version = "0.2.0"
 edition = "2018"
+resolver = "2"
 description = "Custom compile time captured error tracing"
 authors = ["Instrumentisto Team <developer@instrumentisto.com>"]
 license = "BlueOak-1.0.0"
@@ -10,7 +11,7 @@ homepage = "https://github.com/instrumentisto/tracerr-rs"
 repository = "https://github.com/instrumentisto/tracerr-rs"
 readme = "README.md"
 keywords = ["backtrace", "error", "stacktrace", "tracing", "tracerr"]
-categories = []
+categories = ["rust-patterns"]
 include = ["/src/", "/Cargo.toml", "/CHANGELOG.md", "/LICENSE.md", "/README.md"]
 
 [dependencies]

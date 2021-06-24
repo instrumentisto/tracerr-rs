@@ -6,7 +6,7 @@ All user visible changes to this project will be documented in this file. This p
 
 
 
-## [0.2.0] · 2021-??-?? ~TBD
+## [0.2.0] · 2021-06-24
 [0.2.0]: /../../tree/v0.2.0
 
 [Diff](/../../compare/v0.1.2...v0.2.0)
@@ -14,13 +14,14 @@ All user visible changes to this project will be documented in this file. This p
 ### BC Breaks
 
 - Change `Traced::from_parts()` arguments to `(err: E, trace: Trace)` ([#4]).
-- Remove `failure` support.
+- Remove `failure` support ([9f87f0b9]).
 
 ### Added
 
 - `From<(E, Trace)>` implementation for `Traced<E>` ([#4]).
 
 [#4]: /../../pull/4
+[9f87f0b9]: /../../commit/9f87f0b9ff6565d02c28fe1a2a8a34927bb447c6
 
 
 
