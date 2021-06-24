@@ -5,10 +5,10 @@ use std::{
     ops::{Deref, DerefMut},
 };
 
-use derive_more as dm;
+use derive_more::Display;
 
 /// Captured frame of [`Trace`].
-#[derive(Clone, Copy, Debug, dm::Display)]
+#[derive(Clone, Copy, Debug, Display)]
 #[display(fmt = "{}\n  at {}:{}", module, file, line)]
 pub struct Frame {
     /// Name of source file where [`Frame`] is captured.

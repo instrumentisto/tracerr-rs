@@ -1,11 +1,12 @@
 tracerr
 =======
 
-[![Latest version](https://img.shields.io/crates/v/tracerr)](https://crates.io/crates/tracerr)
+[![Latest version](https://img.shields.io/crates/v/tracerr "Latest version")](https://crates.io/crates/tracerr)
+[![Rust docs](https://docs.rs/tracerr/badge.svg "Rust docs")](https://docs.rs/tracerr)
 [![CI](https://github.com/instrumentisto/tracerr-rs/workflows/CI/badge.svg?branch=master "CI")](https://github.com/instrumentisto/tracerr-rs/actions?query=workflow%3ACI+branch%3Amaster)
-[![Rust docs](https://docs.rs/tracerr/badge.svg)](https://docs.rs/tracerr)
-![License](https://img.shields.io/crates/l/tracerr)
-![Unsafe forbidden](https://img.shields.io/badge/unsafe-forbidden-success.svg)
+![Unsafe forbidden](https://img.shields.io/badge/unsafe-forbidden-success.svg "Unsafe forbidden")
+[![Rust 1.51+](https://img.shields.io/badge/rustc-1.52+-lightgray.svg "Rust 1.52+")](https://blog.rust-lang.org/2021/05/06/Rust-1.52.0.html)
+[![License](https://img.shields.io/crates/l/tracerr "License")](https://github.com/instrumentisto/tracerr-rs/blob/master/LICENSE.md)
 
 [API Docs](https://docs.rs/tracerr) |
 [Changelog](https://github.com/instrumentisto/tracerr-rs/blob/master/CHANGELOG.md)

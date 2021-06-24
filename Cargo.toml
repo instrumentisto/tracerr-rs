@@ -14,5 +14,7 @@ keywords = ["backtrace", "error", "stacktrace", "tracing", "tracerr"]
 categories = ["rust-patterns"]
 include = ["/src/", "/Cargo.toml", "/CHANGELOG.md", "/LICENSE.md", "/README.md"]
 
-[dependencies]
-derive_more = "0.99.2"
+[dependencies.derive_more]
+    version = "0.99.2"
+    features = ["display"]
+    default-features = false
