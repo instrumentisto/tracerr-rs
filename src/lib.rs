@@ -112,8 +112,8 @@ impl<E> Traced<E> {
 
     /// Composes given error and the captured [`Trace`] into a [`Traced`] error.
     #[inline]
-    pub fn from_parts(err: E, f: Frame) -> Self {
-        err.wrap_traced(f)
+    pub fn from_parts(err: E, trace: Trace) -> Self {
+        Traced { err, trace }
     }
 
     /// References to the captured [`Trace`].
@@ -129,7 +129,14 @@ impl<E> Traced<E> {
 impl<E> From<(E, Frame)> for Traced<E> {
     #[inline]
     fn from((err, f): (E, Frame)) -> Self {
-        Self::from_parts(err, f)
+        err.wrap_traced(f)
+    }
+}
+
+impl<E> From<(E, Trace)> for Traced<E> {
+    #[inline]
+    fn from((err, trace): (E, Trace)) -> Self {
+        Traced::from_parts(err, trace)
     }
 }
 

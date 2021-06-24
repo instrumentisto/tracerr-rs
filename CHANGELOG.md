@@ -6,6 +6,24 @@ All user visible changes to this project will be documented in this file. This p
 
 
 
+## [0.2.0] · 2021-??-?? ~TBD
+[0.2.0]: /../../tree/v0.2.0
+
+[Diff](/../../compare/v0.1.2...v0.2.0)
+
+### BC Breaks
+
+- Change `Traced::from_parts()` arguments to `(err: E, trace: Trace)` ([#4]).
+
+### Added
+
+- `From<(E, Trace)>` implementation for `Traced<E>` ([#4]).
+
+[#4]: /../../pull/4
+
+
+
+
 ## [0.1.2] · 2020-11-03
 [0.1.2]: /../../tree/v0.1.2
 
