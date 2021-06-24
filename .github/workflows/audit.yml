@@ -2,21 +2,15 @@ name: Security audit
 
 on:
   push:
-    tags-ignore: ["v*"]
-    paths: ["Cargo.toml"]
-  pull_request:
-    paths: ["Cargo.toml"]
+    paths: ["**/Cargo.toml", "**/Cargo.lock"]
   schedule:
     - cron: "7 7 * * *"
 
 jobs:
-  audit:
+  cargo-audit:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v1
-        with:
-          ref: ${{ github.ref }}
-
+      - uses: actions/checkout@v2
       - uses: actions-rs/audit-check@v1
         with:
           token: ${{ secrets.GITHUB_TOKEN }}

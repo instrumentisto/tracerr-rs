@@ -2,9 +2,10 @@ tracerr
 =======
 
 [![Latest version](https://img.shields.io/crates/v/tracerr)](https://crates.io/crates/tracerr)
+[![CI](https://github.com/instrumentisto/tracerr-rs/workflows/CI/badge.svg?branch=master "CI")](https://github.com/instrumentisto/tracerr-rs/actions?query=workflow%3ACI+branch%3Amaster)
+[![Rust docs](https://docs.rs/tracerr/badge.svg)](https://docs.rs/tracerr)
 ![License](https://img.shields.io/crates/l/tracerr)
 ![Unsafe forbidden](https://img.shields.io/badge/unsafe-forbidden-success.svg)
-[![Rust docs](https://docs.rs/tracerr/badge.svg)](https://docs.rs/tracerr)
 
 [API Docs](https://docs.rs/tracerr) |
 [Changelog](https://github.com/instrumentisto/tracerr-rs/blob/master/CHANGELOG.md)
@@ -55,7 +56,7 @@ rust_out
 
 ## License
 
-Copyright © 2019 Instrumentisto Team, https://github.com/instrumentisto
+Copyright © 2019 Instrumentisto Team, <https://github.com/instrumentisto>
 
 This software is subject to the terms of the [Blue Oak Model License 1.0.0](https://github.com/instrumentisto/tracerr-rs/blob/master/LICENSE.md). If a copy of the [BlueOak-1.0.0](https://spdx.org/licenses/BlueOak-1.0.0.html) license was not distributed with this file, You can obtain one at https://blueoakcouncil.org/license/1.0.0.
 
