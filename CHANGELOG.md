@@ -14,12 +14,13 @@ All user visible changes to this project will be documented in this file. This p
 ### BC Breaks
 
 - Change `Traced::from_parts()` arguments to `(err: E, trace: Trace)` ([#4]).
-- Remove `failure` support ([9f87f0b9]).
+- Remove `failure` support ([9f87f0b9], [#2]).
 
 ### Added
 
 - `From<(E, Trace)>` implementation for `Traced<E>` ([#4]).
 
+[#2]: /../../pull/2
 [#4]: /../../pull/4
 [9f87f0b9]: /../../commit/9f87f0b9ff6565d02c28fe1a2a8a34927bb447c6
 
