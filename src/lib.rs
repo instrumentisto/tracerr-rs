@@ -66,17 +66,15 @@
 
 mod trace;
 
-#[cfg(not(feature = "failure"))]
-use std::error::Error;
 use std::{
     convert::{AsMut, AsRef},
+    error::Error,
     sync::atomic::{AtomicUsize, Ordering},
 };
 
-use derive_more as dm;
-#[cfg(feature = "failure")]
-use failure::Fail;
+use derive_more::Display;
 
+#[doc(inline)]
 pub use self::trace::*;
 
 /// Default capacity for [`Trace`] buffer initialization.
@@ -87,7 +85,7 @@ pub static DEFAULT_FRAMES_CAPACITY: AtomicUsize = AtomicUsize::new(10);
 
 /// Transparent wrapper for an error which holds captured error trace
 /// along with it.
-#[derive(Clone, Debug, dm::Display)]
+#[derive(Clone, Debug, Display)]
 #[display(fmt = "{}", err)]
 pub struct Traced<E> {
     /// Original error.
@@ -100,6 +98,7 @@ pub struct Traced<E> {
 impl<E> Traced<E> {
     /// Destructs [`Traced`] error returning only the original error.
     #[inline]
+    #[must_use]
     pub fn into_inner(self) -> E {
         self.err
     }
@@ -107,12 +106,14 @@ impl<E> Traced<E> {
     /// Destructs [`Traced`] error into its original error and the captured
     /// [`Trace`].
     #[inline]
+    #[must_use]
     pub fn into_parts(self) -> (E, Trace) {
         (self.err, self.trace)
     }
 
     /// Composes given error and the captured [`Trace`] into a [`Traced`] error.
     #[inline]
+    #[must_use]
     pub fn from_parts(err: E, trace: Trace) -> Self {
         Traced { err, trace }
     }
@@ -122,6 +123,7 @@ impl<E> Traced<E> {
     /// This is a raw equivalent of `AsRef<Trace>` (which cannot be implemented
     /// at the moment due to the lack of specialization in Rust).
     #[inline]
+    #[must_use]
     pub fn trace(&self) -> &Trace {
         &self.trace
     }
@@ -165,55 +167,12 @@ impl<E> AsRef<Trace> for Traced<E> {
 }
 */
 
-#[cfg(not(feature = "failure"))]
 impl<E: Error> Error for Traced<E> {
     #[inline]
     fn source(&self) -> Option<&(dyn Error + 'static)> {
         self.err.source()
     }
 }
-
-#[cfg(feature = "failure")]
-/// ![feature: failure](https://img.shields.io/badge/feature-failure-blue.svg)
-/// [`Fail`] implementation for [`Traced`].
-impl<E: Fail> Fail for Traced<E> {
-    #[inline]
-    fn name(&self) -> Option<&str> {
-        self.err.name()
-    }
-
-    #[inline]
-    fn cause(&self) -> Option<&dyn Fail> {
-        self.err.cause()
-    }
-
-    #[inline]
-    fn backtrace(&self) -> Option<&failure::Backtrace> {
-        self.err.backtrace()
-    }
-}
-
-#[cfg(feature = "failure")]
-#[allow(clippy::use_self)]
-/// ![feature: failure](https://img.shields.io/badge/feature-failure-blue.svg)
-/// Easy conversion into [`Box`]ed [`Fail`] for [`Traced`] errors.
-impl<E: Fail> From<Traced<E>> for Box<dyn Fail> {
-    #[inline]
-    fn from(err: Traced<E>) -> Self {
-        Box::new(err)
-    }
-}
-
-// TODO: use when Rust will allow specialization
-/*
-#[cfg(feature = "failure")]
-impl<E: Fail> From<Traced<E>> for Traced<Box<dyn Fail>> {
-    #[inline]
-    fn from(err: Traced<E>) -> Self {
-        unimplemented!()
-    }
-}
-*/
 
 /// Trait for wrapping errors into a [`Traced`] wrapper
 /// and growing [`Trace`] inside.
@@ -227,6 +186,7 @@ impl<E: Fail> From<Traced<E>> for Traced<Box<dyn Fail>> {
 pub trait WrapTraced<E> {
     /// Wraps given error into `Traced` wrapper with storing given [`Frame`]
     /// of [`Trace`] inside.
+    #[must_use]
     fn wrap_traced(self, f: Frame) -> Traced<E>;
 }
 
@@ -258,6 +218,7 @@ impl<E> WrapTraced<E> for Traced<E> {
 /// (which cannot be implemented at the moment due to the lack of specialization
 /// in Rust).
 #[inline]
+#[must_use]
 pub fn map_from<F, T: From<F>>(e: Traced<F>) -> Traced<T> {
     Traced {
         err: T::from(e.err),

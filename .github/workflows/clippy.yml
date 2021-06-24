@@ -15,16 +15,8 @@ jobs:
         with:
           ref: ${{ github.ref }}
 
-      - name: Lint without "failure" feature
+      - name: Lint
         uses: actions-rs/clippy-check@v1
         with:
-          name: no "failure"
           args: -- -D clippy::pedantic -D warnings
-          token: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Lint with "failure" feature
-        uses: actions-rs/clippy-check@v1
-        with:
-          name: with "failure"
-          args: --features failure -- -D clippy::pedantic -D warnings
           token: ${{ secrets.GITHUB_TOKEN }}

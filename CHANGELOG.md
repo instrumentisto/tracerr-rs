@@ -14,6 +14,7 @@ All user visible changes to this project will be documented in this file. This p
 ### BC Breaks
 
 - Change `Traced::from_parts()` arguments to `(err: E, trace: Trace)` ([#4]).
+- Remove `failure` support.
 
 ### Added
 
