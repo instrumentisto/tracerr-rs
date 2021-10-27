@@ -80,7 +80,7 @@ cargo.test: test.cargo
 # Run Rust tests of project.
 #
 # Usage:
-#	make test
+#	make test.cargo
 
 test.cargo:
 	cargo test --all-features
