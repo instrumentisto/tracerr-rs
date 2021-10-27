@@ -15,10 +15,10 @@ eq = $(if $(or $(1),$(2)),$(and $(findstring $(1),$(2)),\
 # Aliases #
 ###########
 
-all: fmt lint doc test
+all: fmt lint docs test
 
 
-doc: cargo.doc
+docs: cargo.doc
 
 
 fmt: cargo.fmt
@@ -27,23 +27,27 @@ fmt: cargo.fmt
 lint: cargo.lint
 
 
+test: test.cargo
+
+
 
 
 ##################
 # Cargo commands #
 ##################
 
-# Generate crates documentation from Rust sources.
+# Generate crate documentation from Rust sources.
 #
 # Usage:
-#	make cargo.doc [open=(no|yes)] [clean=(no|yes)]
-#
+#	make cargo.doc [private=(yes|no)] [open=(no|yes)] [clean=(no|yes)]
 
 cargo.doc:
 ifeq ($(clean),yes)
 	@rm -rf target/doc/
 endif
-	cargo doc --all-features $(if $(call eq,$(open),yes),--open,)
+	cargo doc --all-features \
+		$(if $(call eq,$(private),no),,--document-private-items) \
+		$(if $(call eq,$(open),yes),--open,)
 
 
 # Format Rust sources with rustfmt.
@@ -61,7 +65,10 @@ cargo.fmt:
 #	make cargo.lint
 
 cargo.lint:
-	cargo clippy --all-features -- -D clippy::pedantic -D warnings
+	cargo clippy --all-features -- -D warnings
+
+
+cargo.test: test.cargo
 
 
 
@@ -75,7 +82,7 @@ cargo.lint:
 # Usage:
 #	make test
 
-test:
+test.cargo:
 	cargo test --all-features
 
 
@@ -85,5 +92,6 @@ test:
 # .PHONY section #
 ##################
 
-.PHONY: all doc fmt lint test \
-        cargo.doc cargo.fmt cargo.lint
+.PHONY: all docs fmt lint test \
+        cargo.doc cargo.fmt cargo.lint cargo.test \
+        test.cargo

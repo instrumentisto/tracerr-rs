@@ -6,6 +6,24 @@ All user visible changes to this project will be documented in this file. This p
 
 
 
+## [0.3.0] · 2021-10-??
+[0.3.0]: /../../tree/v0.3.0
+
+[Diff](/../../compare/v0.2.0...v0.3.0)
+
+### BC Breaks
+
+- Renamed `Traced::from_parts()` to `Traced::compose()`.
+- Renamed `Traced::into_parts()` to `Traced::split()`.
+- Set MSRV to [1.56.0](https://blog.rust-lang.org/2021/10/21/Rust-1.56.0.html).
+
+### Added
+
+- Sealing `WrapTraced` trait with [`#[sealed]`](https://docs.rs/sealed).
+
+
+
+
 ## [0.2.0] · 2021-06-24
 [0.2.0]: /../../tree/v0.2.0
 
@@ -64,7 +82,6 @@ Published initial implementation, which provides:
     - `map_from_and_wrap!()` wraps error and does `From` conversion for it in a closure;
     - `from_and_wrap!()` does `From` conversion for error and then wraps it in a closure.
 - `map_from()` function, to apply `From` conversion for the error inside `Traced` without capturing the `Frame`.
-
 
 
 

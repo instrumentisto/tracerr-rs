@@ -49,14 +49,12 @@ impl Trace {
 impl Deref for Trace {
     type Target = Vec<Frame>;
 
-    #[inline]
     fn deref(&self) -> &Vec<Frame> {
         &self.0
     }
 }
 
 impl DerefMut for Trace {
-    #[inline]
     fn deref_mut(&mut self) -> &mut Vec<Frame> {
         &mut self.0
     }
@@ -74,7 +72,7 @@ impl fmt::Display for Trace {
 
 #[cfg(test)]
 mod frame_spec {
-    use super::*;
+    use super::Frame;
 
     #[test]
     fn displays_module_followed_by_file_and_line() {
@@ -83,13 +81,13 @@ mod frame_spec {
             line: 32,
             module: "main::sub",
         };
-        assert_eq!(format!("{}", frame), "main::sub\n  at my_file.rs:32");
+        assert_eq!(frame.to_string(), "main::sub\n  at my_file.rs:32");
     }
 }
 
 #[cfg(test)]
 mod trace_spec {
-    use super::*;
+    use super::{Frame, Trace};
 
     #[test]
     fn displays_frames_separated_by_blank_line() {
@@ -119,7 +117,7 @@ main::sub2
   at anywhere/my_file.rs:54
 main::sub3
   at file.rs:232
-            "#
+            "#,
         );
     }
 }

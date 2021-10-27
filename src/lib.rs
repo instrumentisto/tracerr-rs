@@ -1,48 +1,6 @@
-//! Custom compile time captured error tracing.
-//!
-//! Provides tools for making error output more informative. It adds ability
-//! to capture custom error trace frames (at compile time) and to display errors
-//! with the final captured trace.
-//!
-//! # Usage
-//!
-//! The common rule:
-//! - Use macro to capture trace frame in the invocation place.
-//!
-//! ```
-//! use tracerr::Traced;
-//!
-//! let err = tracerr::new!("my error"); // captures frame
-//!
-//! let res: Result<(), _> = Err(err)
-//!     .map_err(tracerr::wrap!()); // captures frame
-//!
-//! let err: Traced<&'static str> = res.unwrap_err();
-//! # #[cfg(not(target_os = "windows"))]
-//! assert_eq!(
-//!     format!("{}\n{}", err, err.trace()),
-//!     r"my error
-//! error trace:
-//! rust_out
-//!   at src/lib.rs:6
-//! rust_out
-//!   at src/lib.rs:9",
-//! );
-//!
-//! let (val, trace) = err.into_parts();
-//! # #[cfg(not(target_os = "windows"))]
-//! assert_eq!(
-//!     format!("{}\n{}", val, trace),
-//!     r"my error
-//! error trace:
-//! rust_out
-//!   at src/lib.rs:6
-//! rust_out
-//!   at src/lib.rs:9",
-//! );
-//! ```
-
+#![doc = include_str!("../README.md")]
 #![deny(
+    macro_use_extern_crate,
     nonstandard_style,
     rust_2018_idioms,
     rustdoc::broken_intra_doc_links,
@@ -52,130 +10,177 @@
 )]
 #![forbid(non_ascii_idents, unsafe_code)]
 #![warn(
-    deprecated_in_future,
+    clippy::as_conversions,
+    clippy::branches_sharing_code,
+    clippy::clone_on_ref_ptr,
+    clippy::create_dir,
+    clippy::dbg_macro,
+    clippy::debug_assert_with_mut_call,
+    clippy::decimal_literal_representation,
+    clippy::else_if_without_else,
+    clippy::empty_line_after_outer_attr,
+    clippy::exit,
+    clippy::expect_used,
+    clippy::fallible_impl_from,
+    clippy::filetype_is_file,
+    clippy::float_cmp_const,
+    clippy::fn_to_numeric_cast,
+    clippy::get_unwrap,
+    clippy::if_then_some_else_none,
+    clippy::imprecise_flops,
+    clippy::let_underscore_must_use,
+    clippy::lossy_float_literal,
+    clippy::map_err_ignore,
+    clippy::mem_forget,
+    clippy::missing_const_for_fn,
+    clippy::missing_docs_in_private_items,
+    clippy::multiple_inherent_impl,
+    clippy::mutex_integer,
+    clippy::nonstandard_macro_braces,
+    clippy::option_if_let_else,
+    clippy::panic_in_result_fn,
+    clippy::pedantic,
+    clippy::print_stderr,
+    clippy::print_stdout,
+    clippy::rc_buffer,
+    clippy::rc_mutex,
+    clippy::rest_pat_in_fully_bound_structs,
+    clippy::shadow_unrelated,
+    clippy::str_to_string,
+    clippy::string_add,
+    clippy::string_lit_as_bytes,
+    clippy::string_to_string,
+    clippy::suboptimal_flops,
+    clippy::suspicious_operation_groupings,
+    clippy::todo,
+    clippy::trivial_regex,
+    clippy::unimplemented,
+    clippy::unnecessary_self_imports,
+    clippy::unneeded_field_pattern,
+    clippy::unwrap_in_result,
+    clippy::unwrap_used,
+    clippy::use_debug,
+    clippy::use_self,
+    clippy::useless_let_if_seq,
+    clippy::verbose_file_reads,
+    clippy::wildcard_enum_match_arm,
+    future_incompatible,
+    meta_variable_misuse,
     missing_copy_implementations,
     missing_debug_implementations,
     missing_docs,
+    noop_method_call,
+    semicolon_in_expressions_from_macros,
     unreachable_pub,
+    unused_crate_dependencies,
+    unused_extern_crates,
     unused_import_braces,
     unused_labels,
     unused_lifetimes,
     unused_qualifications,
-    unused_results
+    unused_results,
+    variant_size_differences
 )]
 
 mod trace;
 
 use std::{
-    convert::{AsMut, AsRef},
     error::Error,
     sync::atomic::{AtomicUsize, Ordering},
 };
 
-use derive_more::Display;
+use derive_more::{AsMut, AsRef, Display};
+use sealed::sealed;
 
 #[doc(inline)]
 pub use self::trace::*;
 
-/// Default capacity for [`Trace`] buffer initialization.
+/// Default capacity for a [`Trace`] buffer initialization.
 ///
-/// May be changed if your application requires larger size
-/// for better performance and re-allocation avoidance.
+/// May be changed if your application requires larger size for better
+/// performance and re-allocation avoidance.
 pub static DEFAULT_FRAMES_CAPACITY: AtomicUsize = AtomicUsize::new(10);
 
-/// Transparent wrapper for an error which holds captured error trace
-/// along with it.
-#[derive(Clone, Debug, Display)]
+/// Wrapper for an arbitrary error holding the captured error trace along.
+#[derive(AsMut, AsRef, Clone, Debug, Display)]
 #[display(fmt = "{}", err)]
-pub struct Traced<E> {
-    /// Original error.
-    err: E,
-
+pub struct Traced<E: ?Sized> {
     /// Captured error trace.
     trace: Trace,
+
+    /// Original error.
+    #[as_mut]
+    #[as_ref]
+    err: E,
+}
+
+impl<E: ?Sized> Traced<E> {
+    /// References to the captured [`Trace`].
+    ///
+    /// This is a raw equivalent of `AsRef<Trace>` (which cannot be implemented
+    /// at the moment due to the lack of specialization in Rust).
+    #[must_use]
+    pub const fn trace(&self) -> &Trace {
+        &self.trace
+    }
 }
 
 impl<E> Traced<E> {
-    /// Destructs [`Traced`] error returning only the original error.
-    #[inline]
+    /// Destructs this [`Traced`] wrapper returning only the underlying error
+    /// and loosing the captured [`Trace`].
+    // false positive: constant functions cannot evaluate destructors
+    #[allow(clippy::missing_const_for_fn)]
     #[must_use]
     pub fn into_inner(self) -> E {
         self.err
     }
 
-    /// Destructs [`Traced`] error into its original error and the captured
-    /// [`Trace`].
-    #[inline]
+    /// Splits this [`Traced`] wrapper into the underlying error and the
+    /// captured [`Trace`].
+    // false positive: constant functions cannot evaluate destructors
+    #[allow(clippy::missing_const_for_fn)]
     #[must_use]
-    pub fn into_parts(self) -> (E, Trace) {
+    pub fn split(self) -> (E, Trace) {
         (self.err, self.trace)
     }
 
-    /// Composes given error and the captured [`Trace`] into a [`Traced`] error.
-    #[inline]
+    /// Composes the given error and the captured [`Trace`] into a [`Traced`]
+    /// wrapper.
     #[must_use]
-    pub fn from_parts(err: E, trace: Trace) -> Self {
-        Traced { err, trace }
-    }
-
-    /// References to the captured [`Trace`].
-    ///
-    /// This is a raw equivalent of `AsRef<Trace>` (which cannot be implemented
-    /// at the moment due to the lack of specialization in Rust).
-    #[inline]
-    #[must_use]
-    pub fn trace(&self) -> &Trace {
-        &self.trace
+    pub const fn compose(error: E, trace: Trace) -> Self {
+        Self { err: error, trace }
     }
 }
 
 impl<E> From<(E, Frame)> for Traced<E> {
-    #[inline]
     fn from((err, f): (E, Frame)) -> Self {
         err.wrap_traced(f)
     }
 }
 
 impl<E> From<(E, Trace)> for Traced<E> {
-    #[inline]
     fn from((err, trace): (E, Trace)) -> Self {
-        Traced::from_parts(err, trace)
+        Self::compose(err, trace)
     }
 }
 
-impl<E> AsRef<E> for Traced<E> {
-    #[inline]
-    fn as_ref(&self) -> &E {
-        &self.err
-    }
-}
-
-impl<E> AsMut<E> for Traced<E> {
-    #[inline]
-    fn as_mut(&mut self) -> &mut E {
-        &mut self.err
-    }
-}
-
-// TODO: use when Rust will allow specialization
+// TODO: Use when Rust will allow specialization... T_T
 /*
 impl<E> AsRef<Trace> for Traced<E> {
-    #[inline]
     fn as_ref(&self) -> &Trace {
         &self.trace
     }
 }
 */
 
-impl<E: Error> Error for Traced<E> {
-    #[inline]
+impl<E: Error + ?Sized> Error for Traced<E> {
     fn source(&self) -> Option<&(dyn Error + 'static)> {
         self.err.source()
     }
 }
 
-/// Trait for wrapping errors into a [`Traced`] wrapper
-/// and growing [`Trace`] inside.
+/// Trait for wrapping errors into a [`Traced`] wrapper and growing its
+/// [`Trace`] inside.
 ///
 /// # Sealed
 ///
@@ -183,13 +188,15 @@ impl<E: Error> Error for Traced<E> {
 /// so, outside this library in any code the following MUST BE met:
 /// - NEITHER this trait is implemented directly;
 /// - NOR its methods are invoked directly.
+#[sealed]
 pub trait WrapTraced<E> {
-    /// Wraps given error into `Traced` wrapper with storing given [`Frame`]
-    /// of [`Trace`] inside.
+    /// Wraps this error into a [`Traced`] wrapper, storing the given [`Frame`]
+    /// of a [`Trace`] inside.
     #[must_use]
     fn wrap_traced(self, f: Frame) -> Traced<E>;
 }
 
+#[sealed]
 impl<E> WrapTraced<E> for E {
     fn wrap_traced(self, f: Frame) -> Traced<Self> {
         let mut trace = Trace::new(Vec::with_capacity(
@@ -200,10 +207,10 @@ impl<E> WrapTraced<E> for E {
     }
 }
 
+#[sealed]
 impl<E> WrapTraced<E> for Traced<E> {
-    /// Pushes given [`Frame`] into already captured [`Trace`]
-    /// of [`Traced`] wrapper.
-    #[inline]
+    /// Pushes the given [`Frame`] into the already captured [`Trace`] of this
+    /// [`Traced`] wrapper.
     fn wrap_traced(mut self, f: Frame) -> Self {
         self.trace.push(f);
         self
@@ -211,13 +218,13 @@ impl<E> WrapTraced<E> for Traced<E> {
 }
 
 // TODO: deprecate when Rust will allow specialization
-/// Maps value of error wrapped in [`Traced`] with its [`From`] implementation.
+/// Maps an inner value of an error wrapped in a [`Traced`] with its [`From`]
+/// implementation.
 ///
 /// This is an equivalent of
 /// `impl<E1, E2: From<E1>> From<Traced<E1>> for Traced<E2>`
 /// (which cannot be implemented at the moment due to the lack of specialization
 /// in Rust).
-#[inline]
 #[must_use]
 pub fn map_from<F, T: From<F>>(e: Traced<F>) -> Traced<T> {
     Traced {
@@ -226,7 +233,7 @@ pub fn map_from<F, T: From<F>>(e: Traced<F>) -> Traced<T> {
     }
 }
 
-// TODO: use when Rust will allow specialization
+// TODO: Use when Rust will allow specialization... T_T
 /*
 impl<E1, E2> From<Traced<E1>> for Traced<E2>
 where
@@ -238,14 +245,14 @@ where
 }
 */
 
-/// Captures new [`Frame`] in the invocation place and wraps the given error
-/// into [`Traced`] wrapper containing this [`Frame`]. If the error is
-/// a [`Traced`] already then just growth its [`Trace`] with the captured
+/// Captures a new [`Frame`] in the invocation place and wraps the given error
+/// into a [`Traced`] wrapper containing this [`Frame`]. If the error represents
+/// a [`Traced`] already, then just growths its [`Trace`] with the captured
 /// [`Frame`].
 ///
 /// # Examples
 ///
-/// ```
+/// ```rust
 /// use tracerr::Traced;
 ///
 /// let err: u32 = 89;
@@ -259,15 +266,15 @@ macro_rules! new {
     };
 }
 
-/// Captures new [`Frame`] in the invocation place and wraps the given error
-/// into [`Traced`] wrapper containing this [`Frame`] with applying required
-/// [`From`] implementation for the wrapped error. If the error is a [`Traced`]
-/// already then just applies [`From`] implementation and growth its [`Trace`]
-/// with the captured [`Frame`].
+/// Captures a new [`Frame`] in the invocation place and wraps the given error
+/// into a [`Traced`] wrapper containing this [`Frame`] with applying the
+/// required [`From`] conversion for the wrapped error. If the error represents
+/// a [`Traced`] already, then just applies [`From`] conversion and growths its
+/// [`Trace`] with the captured [`Frame`].
 ///
 /// # Examples
 ///
-/// ```
+/// ```rust
 /// use tracerr::Traced;
 ///
 /// let err: Traced<u8> = tracerr::new!(8);
@@ -280,14 +287,14 @@ macro_rules! map_from_and_new {
     };
 }
 
-/// Provides a closure, which captures new [`Frame`] in the invocation place
-/// and wraps the given error into [`Traced`] wrapper containing this [`Frame`].
-/// If the error is a [`Traced`] already then just growth its [`Trace`]
-/// with the captured [`Frame`].
+/// Provides a closure, which captures a new [`Frame`] in the invocation place
+/// and wraps the given error into a [`Traced`] wrapper containing this
+/// [`Frame`]. If the error represents a [`Traced`] already, then just growths
+/// its [`Trace`] with the captured [`Frame`].
 ///
 /// # Examples
 ///
-/// ```
+/// ```rust
 /// use tracerr::Traced;
 ///
 /// let res: Result<(), u32> = Err(89);
@@ -308,13 +315,13 @@ macro_rules! wrap {
     };
 }
 
-/// Provides a closure, which captures new [`Frame`] in the invocation place
-/// for the given [`Traced`] wrapper and applies required [`From`]
-/// implementation for the wrapped error.
+/// Provides a closure, which captures a new [`Frame`] in the invocation place
+/// for the given [`Traced`] wrapper and applies the required [`From`]
+/// conversion for the wrapped error.
 ///
 /// # Examples
 ///
-/// ```
+/// ```rust
 /// use tracerr::Traced;
 ///
 /// let res: Result<(), Traced<u8>> = Err(tracerr::new!(7));
@@ -333,15 +340,15 @@ macro_rules! map_from_and_wrap {
     };
 }
 
-/// Provides a closure, which captures new [`Frame`] in the invocation place,
-/// applies required [`From`] implementation for the given error and wraps it
-/// into [`Traced`] wrapper containing this [`Frame`].
-/// If the error is a [`Traced`] already then just growth its [`Trace`]
-/// with the captured [`Frame`].
+/// Provides a closure, which captures a new [`Frame`] in the invocation place,
+/// applies the required [`From`] conversion for the given error, and wraps it
+/// into a [`Traced`] wrapper containing this [`Frame`]. If the error represents
+/// a [`Traced`] already, then just growths its [`Trace`] with the captured
+/// [`Frame`].
 ///
 /// # Examples
 ///
-/// ```
+/// ```rust
 /// use tracerr::Traced;
 ///
 /// let res: Result<(), u8> = Err(7);

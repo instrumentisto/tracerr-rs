@@ -1,6 +1,11 @@
 name: CI
 
-on: push
+on:
+  push:
+    branches: ["master"]
+    tags: ["v*"]
+  pull_request:
+    branches: ["master"]
 
 env:
   RUST_BACKTRACE: 1
@@ -12,7 +17,6 @@ jobs:
   ##########################
 
   clippy:
-    name: Clippy
     if: ${{ github.ref == 'refs/heads/master'
             || startsWith(github.ref, 'refs/tags/v')
             || !contains(github.event.head_commit.message, '[skip ci]') }}
@@ -25,7 +29,7 @@ jobs:
           toolchain: stable
           components: clippy
 
-      - run: make lint
+      - run: make cargo.lint
 
   rustfmt:
     if: ${{ github.ref == 'refs/heads/master'
@@ -40,7 +44,7 @@ jobs:
           toolchain: nightly
           components: rustfmt
 
-      - run: make fmt check=yes
+      - run: make cargo.fmt check=yes
 
 
 
@@ -49,8 +53,37 @@ jobs:
   # Testing #
   ###########
 
+  msrv:
+    name: MSRV
+    if: ${{ github.ref == 'refs/heads/master'
+            || startsWith(github.ref, 'refs/tags/v')
+            || !contains(github.event.head_commit.message, '[skip ci]') }}
+    strategy:
+      fail-fast: false
+      matrix:
+        msrv: ['1.56.0']
+        os:
+          - ubuntu
+          - macOS
+          - windows
+    runs-on: ${{ matrix.os }}-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions-rs/toolchain@v1
+        with:
+          profile: minimal
+          toolchain: nightly
+      - uses: actions-rs/toolchain@v1
+        with:
+          profile: minimal
+          toolchain: ${{ matrix.msrv }}
+          override: true
+
+      - run: cargo +nightly update -Z minimal-versions
+
+      - run: make test.cargo
+
   test:
-    name: Unit tests
     if: ${{ github.ref == 'refs/heads/master'
             || startsWith(github.ref, 'refs/tags/v')
             || !contains(github.event.head_commit.message, '[skip ci]') }}
@@ -74,44 +107,14 @@ jobs:
           toolchain: ${{ matrix.toolchain }}
           override: true
 
-      - run: make test
-
-  msrv:
-    name: MSRV
-    if: ${{ github.ref == 'refs/heads/master'
-            || startsWith(github.ref, 'refs/tags/v')
-            || !contains(github.event.head_commit.message, '[skip ci]') }}
-    strategy:
-      fail-fast: false
-      matrix:
-        msrv: ['1.52.0']
-        os:
-          - ubuntu
-          - macOS
-          - windows
-    runs-on: ${{ matrix.os }}-latest
-    steps:
-      - uses: actions/checkout@v2
-      - uses: actions-rs/toolchain@v1
-        with:
-          profile: minimal
-          toolchain: nightly
-      - uses: actions-rs/toolchain@v1
-        with:
-          profile: minimal
-          toolchain: ${{ matrix.msrv }}
-          override: true
-
-      - run: cargo +nightly update -Z minimal-versions
-
-      - run: make test
+      - run: make test.cargo
 
 
 
 
-  ############
-  # Building #
-  ############
+  #################
+  # Documentation #
+  #################
 
   rustdoc:
     if: ${{ github.ref == 'refs/heads/master'
@@ -125,7 +128,7 @@ jobs:
           profile: minimal
           toolchain: stable
 
-      - run: make doc open=no
+      - run: make cargo.doc private=yes open=no
 
 
 
@@ -136,7 +139,7 @@ jobs:
 
   release-github:
     name: Release on GitHub
-    needs: ['clippy', 'rustfmt', 'rustdoc', 'test']
+    needs: ["clippy", "msrv", "rustdoc", "rustfmt", "test"]
     if: ${{ startsWith(github.ref, 'refs/tags/v') }}
     runs-on: ubuntu-latest
     steps:
@@ -145,6 +148,7 @@ jobs:
       - name: Parse release version
         id: release
         run: echo ::set-output name=VERSION::${GITHUB_REF#refs/tags/v}
+
       - name: Verify release version matches Cargo manifest
         run: >-
           test "${{ steps.release.outputs.VERSION }}" \
@@ -167,7 +171,7 @@ jobs:
 
   release-crate:
     name: Release on crates.io
-    needs: ['release-github']
+    needs: ["release-github"]
     if: ${{ startsWith(github.ref, 'refs/tags/v') }}
     runs-on: ubuntu-latest
     steps:
@@ -177,8 +181,6 @@ jobs:
           profile: minimal
           toolchain: stable
 
-      - name: Release on crates.io
-        uses: actions-rs/cargo@v1
-        with:
-          command: publish
-          args: --token ${{ secrets.CRATESIO_TOKEN }}
+      - name: Publish `tracerr` crate
+        run: cargo publish -p tracerr
+                   --token ${{ secrets.CRATESIO_TOKEN }}
