@@ -16,4 +16,4 @@ include = ["/src/", "/CHANGELOG.md", "/LICENSE.md", "/README.md"]
 
 [dependencies]
 derive_more = { version = "0.99.8", features = ["as_mut", "as_ref", "display"], default-features = false }
-sealed = "0.3"
+sealed = "0.4"
