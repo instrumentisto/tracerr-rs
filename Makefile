@@ -80,10 +80,19 @@ cargo.test: test.cargo
 # Run Rust tests of project.
 #
 # Usage:
-#	make test.cargo
+#	make test.cargo [careful=(no|yes)]
 
 test.cargo:
-	cargo test --all-features
+ifeq ($(careful),yes)
+ifeq ($(shell cargo install --list | grep cargo-careful),)
+	cargo install cargo-careful
+endif
+ifeq ($(shell rustup component list --toolchain=nightly \
+              | grep 'rust-src (installed)'),)
+	rustup component add --toolchain=nightly rust-src
+endif
+endif
+	cargo $(if $(call eq,$(careful),yes),+nightly careful,) test --all-features
 
 
 
