@@ -55,10 +55,7 @@ jobs:
       fail-fast: false
       matrix:
         msrv: ["1.56.0"]
-        os:
-          - ubuntu
-          - macOS
-          - windows
+        os: ["ubuntu", "macOS", "windows"]
     runs-on: ${{ matrix.os }}-latest
     steps:
       - uses: actions/checkout@v3
@@ -78,14 +75,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os:
-          - ubuntu
-          - macOS
-          - windows
-        toolchain:
-          - stable
-          - beta
-          - nightly
+        toolchain: ["stable", "beta", "nightly"]
+        os: ["ubuntu", "macOS", "windows"]
     runs-on: ${{ matrix.os }}-latest
     steps:
       - uses: actions/checkout@v3
@@ -118,6 +109,8 @@ jobs:
           toolchain: stable
 
       - run: make cargo.doc private=yes open=no
+        env:
+          RUSTFLAGS: -D warnings
 
 
 
@@ -126,8 +119,8 @@ jobs:
   # Releasing #
   #############
 
-  release-crate:
-    name: release on crates.io
+  publish:
+    name: publish (crates.io)
     if: ${{ startsWith(github.ref, 'refs/tags/v') }}
     needs: ["release-github"]
     runs-on: ubuntu-latest
@@ -137,12 +130,12 @@ jobs:
         with:
           toolchain: stable
 
-      - name: Publish `tracerr` crate
-        run: cargo publish -p tracerr
-                   --token ${{ secrets.CRATESIO_TOKEN }}
+      - run: cargo publish -p tracerr
+        env:
+          CARGO_REGISTRY_TOKEN: ${{ secrets.CRATESIO_TOKEN }}
 
   release-github:
-    name: release on GitHub
+    name: release (GitHub)
     if: ${{ startsWith(github.ref, 'refs/tags/v') }}
     needs: ["clippy", "msrv", "rustdoc", "rustfmt", "test"]
     runs-on: ubuntu-latest
