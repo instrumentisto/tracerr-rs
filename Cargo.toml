@@ -1,8 +1,8 @@
 [package]
 name = "tracerr"
-version = "0.3.0"
+version = "0.4.0-dev"
 edition = "2021"
-rust-version = "1.56"
+rust-version = "1.65"
 description = "Custom compile-time captured error tracing."
 authors = ["Instrumentisto Team <developer@instrumentisto.com>"]
 license = "BlueOak-1.0.0"
@@ -15,5 +15,5 @@ categories = ["rust-patterns"]
 include = ["/src/", "/CHANGELOG.md", "/LICENSE.md", "/README.md"]
 
 [dependencies]
-derive_more = { version = "0.99.8", features = ["as_mut", "as_ref", "display"], default-features = false }
+derive_more = { version = "=1.0.0-beta.3", features = ["as_mut", "as_ref", "display"] }
 sealed = "0.5"

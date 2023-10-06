@@ -6,6 +6,18 @@ All user visible changes to this project will be documented in this file. This p
 
 
 
+## [0.4.0] · 2023-??-?? (unreleased)
+[0.4.0]: /../../tree/v0.4.0
+
+[Diff](/../../compare/v0.3.0...v0.4.0)
+
+### BC Breaks
+
+- Set MSRV to [1.65.0](https://blog.rust-lang.org/2022/11/03/Rust-1.65.0.html).
+
+
+
+
 ## [0.3.0] · 2021-10-27
 [0.3.0]: /../../tree/v0.3.0
 

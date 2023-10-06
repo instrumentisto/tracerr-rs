@@ -151,9 +151,7 @@ pub static DEFAULT_FRAMES_CAPACITY: AtomicUsize = AtomicUsize::new(10);
 
 /// Wrapper for an arbitrary error holding the captured error trace along.
 #[derive(AsMut, AsRef, Clone, Debug, Display)]
-// TODO: Use "{err}" syntax once MSRV bumps above 1.58, and `derive_more`
-//       supports it.
-#[display(fmt = "{}", err)]
+#[display("{err}")]
 pub struct Traced<E: ?Sized> {
     /// Captured error trace.
     trace: Trace,

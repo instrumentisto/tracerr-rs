@@ -9,9 +9,7 @@ use derive_more::Display;
 
 /// Captured frame of [`Trace`].
 #[derive(Clone, Copy, Debug, Display)]
-// TODO: Use "{module}\n  at {file}:{line}" syntax once MSRV bumps above 1.58,
-//       and `derive_more` supports it.
-#[display(fmt = "{}\n  at {}:{}", module, file, line)]
+#[display("{module}\n  at {file}:{line}")]
 pub struct Frame {
     /// Name of source file where [`Frame`] is captured.
     pub file: &'static str,
@@ -62,12 +60,11 @@ impl DerefMut for Trace {
     }
 }
 
-impl fmt::Display for Trace {
+impl Display for Trace {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         write!(f, "error trace:")?;
         for frame in &self.0 {
-            // TODO: Use "\n{frame}" syntax once MSRV bumps above 1.58.
-            write!(f, "\n{}", frame)?;
+            write!(f, "\n{frame}")?;
         }
         Ok(())
     }
@@ -84,6 +81,7 @@ mod frame_spec {
             line: 32,
             module: "main::sub",
         };
+
         assert_eq!(frame.to_string(), "main::sub\n  at my_file.rs:32");
     }
 }
@@ -111,9 +109,9 @@ mod trace_spec {
                 module: "main::sub3",
             },
         ]);
-        // TODO: Use "{stack}\n" syntax once MSRV bumps above 1.58.
+
         assert_eq!(
-            format!("{}\n            ", stack),
+            format!("{stack}\n            "),
             r#"error trace:
 main::sub1
   at src/my_file.rs:32
