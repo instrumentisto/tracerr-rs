@@ -2,7 +2,7 @@ tracerr
 =======
 
 [![crates.io](https://img.shields.io/crates/v/tracerr.svg "crates.io")](https://crates.io/crates/tracerr)
-[![Rust 1.65+](https://img.shields.io/badge/rustc-1.65+-lightgray.svg "Rust 1.65+")](https://blog.rust-lang.org/2022/11/03/Rust-1.65.0.html)
+[![Rust 1.72+](https://img.shields.io/badge/rustc-1.72+-lightgray.svg "Rust 1.72+")](https://blog.rust-lang.org/2023/08/24/Rust-1.72.0.html)
 [![Unsafe Forbidden](https://img.shields.io/badge/unsafe-forbidden-success.svg)](https://github.com/rust-secure-code/safety-dance)  
 [![CI](https://github.com/instrumentisto/tracerr-rs/workflows/CI/badge.svg?branch=main "CI")](https://github.com/instrumentisto/tracerr-rs/actions?query=workflow%3ACI+branch%3Amain)
 [![Rust docs](https://docs.rs/tracerr/badge.svg "Rust docs")](https://docs.rs/tracerr)
