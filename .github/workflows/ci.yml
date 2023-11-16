@@ -68,9 +68,7 @@ jobs:
 
       - run: cargo +nightly update -Z minimal-versions
 
-      # TODO: Uncomment once MSRV is bumped up above 1.71 Rust.
-      #- run: make test.cargo
-      - run: cargo test --lib
+      - run: make test.cargo
 
   test:
     strategy:
