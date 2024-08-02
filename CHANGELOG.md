@@ -6,14 +6,16 @@ All user visible changes to this project will be documented in this file. This p
 
 
 
-## [0.4.0] · 2023-??-?? (unreleased)
+## [0.4.0] · 2024-??-?? (unreleased)
 [0.4.0]: /../../tree/v0.4.0
 
 [Diff](/../../compare/v0.3.0...v0.4.0)
 
 ### BC Breaks
 
-- Set MSRV to [1.72.0](https://blog.rust-lang.org/2023/08/24/Rust-1.72.0.html).
+- Set [MSRV] to [1.75.0](https://blog.rust-lang.org/2023/12/28/Rust-1.75.0.html). ([#11])
+
+[#11]: /../../pull/11
 
 
 
@@ -27,7 +29,7 @@ All user visible changes to this project will be documented in this file. This p
 
 - Renamed `Traced::from_parts()` to `Traced::compose()`.
 - Renamed `Traced::into_parts()` to `Traced::split()`.
-- Set MSRV to [1.56.0](https://blog.rust-lang.org/2021/10/21/Rust-1.56.0.html).
+- Set [MSRV] to [1.56.0](https://blog.rust-lang.org/2021/10/21/Rust-1.56.0.html).
 
 ### Added
 
@@ -98,4 +100,5 @@ Published initial implementation, which provides:
 
 
 
+[MSRV]: https://doc.rust-lang.org/cargo/reference/manifest.html#the-rust-version-field
 [Semantic Versioning 2.0.0]: https://semver.org
