@@ -2,7 +2,7 @@
 name = "tracerr"
 version = "0.4.0-dev"
 edition = "2021"
-rust-version = "1.72"
+rust-version = "1.75"
 description = "Custom compile-time captured error tracing."
 authors = ["Instrumentisto Team <developer@instrumentisto.com>"]
 license = "BlueOak-1.0.0"
