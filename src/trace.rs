@@ -41,7 +41,7 @@ impl Trace {
     /// Creates and returns new [`Trace`] from the given [`Frame`]s.
     #[inline]
     #[must_use]
-    pub fn new(frames: Vec<Frame>) -> Self {
+    pub const fn new(frames: Vec<Frame>) -> Self {
         Self(frames)
     }
 }
