@@ -93,7 +93,7 @@ ifeq ($(shell rustup component list --toolchain=nightly \
 endif
 endif
 	cargo $(if $(call eq,$(careful),yes),+nightly careful,) test --all-features\
-		$(if $(call eq,$(careful),yes),--lib,)
+		$(if $(call eq,$(careful),yes),,--lib)
 
 
 
