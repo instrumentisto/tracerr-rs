@@ -72,6 +72,7 @@
     clippy::or_fun_call,
     clippy::panic_in_result_fn,
     clippy::partial_pub_fields,
+    clippy::pathbuf_init_then_push,
     clippy::pedantic,
     clippy::print_stderr,
     clippy::print_stdout,
@@ -102,6 +103,7 @@
     clippy::suspicious_xor_used_as_pow,
     clippy::tests_outside_test_module,
     clippy::todo,
+    clippy::too_long_first_doc_paragraph,
     clippy::trailing_empty_array,
     clippy::transmute_undefined_repr,
     clippy::trivial_regex,
@@ -115,6 +117,7 @@
     clippy::unnecessary_struct_initialization,
     clippy::unneeded_field_pattern,
     clippy::unused_peekable,
+    clippy::unused_result_ok,
     clippy::unwrap_in_result,
     clippy::unwrap_used,
     clippy::use_debug,
@@ -311,11 +314,12 @@ where
 */
 
 /// Captures a new [`Frame`] in the invocation place and wraps the given error
-/// into a [`Traced`] wrapper containing this [`Frame`]. If the error represents
-/// a [`Traced`] already, then just growths its [`Trace`] with the captured
-/// [`Frame`].
+/// into a [`Traced`] wrapper containing this [`Frame`].
 ///
-/// # Examples
+/// If the error represents a [`Traced`] already, then just growths its
+/// [`Trace`] with the captured [`Frame`].
+///
+/// # Example
 ///
 /// ```rust
 /// use tracerr::Traced;
@@ -333,11 +337,12 @@ macro_rules! new {
 
 /// Captures a new [`Frame`] in the invocation place and wraps the given error
 /// into a [`Traced`] wrapper containing this [`Frame`] with applying the
-/// required [`From`] conversion for the wrapped error. If the error represents
-/// a [`Traced`] already, then just applies [`From`] conversion and growths its
-/// [`Trace`] with the captured [`Frame`].
+/// required [`From`] conversion for the wrapped error.
 ///
-/// # Examples
+/// If the error represents a [`Traced`] already, then just applies [`From`]
+/// conversion and growths its [`Trace`] with the captured [`Frame`].
+///
+/// # Example
 ///
 /// ```rust
 /// use tracerr::Traced;
@@ -354,10 +359,12 @@ macro_rules! map_from_and_new {
 
 /// Provides a closure, which captures a new [`Frame`] in the invocation place
 /// and wraps the given error into a [`Traced`] wrapper containing this
-/// [`Frame`]. If the error represents a [`Traced`] already, then just growths
-/// its [`Trace`] with the captured [`Frame`].
+/// [`Frame`].
 ///
-/// # Examples
+/// If the error represents a [`Traced`] already, then just growths its
+/// [`Trace`] with the captured [`Frame`].
+///
+/// # Example
 ///
 /// ```rust
 /// use tracerr::Traced;
@@ -407,11 +414,12 @@ macro_rules! map_from_and_wrap {
 
 /// Provides a closure, which captures a new [`Frame`] in the invocation place,
 /// applies the required [`From`] conversion for the given error, and wraps it
-/// into a [`Traced`] wrapper containing this [`Frame`]. If the error represents
-/// a [`Traced`] already, then just growths its [`Trace`] with the captured
-/// [`Frame`].
+/// into a [`Traced`] wrapper with this [`Frame`].
 ///
-/// # Examples
+/// If the error represents a [`Traced`] already, then just growths its
+/// [`Trace`] with the captured [`Frame`].
+///
+/// # Example
 ///
 /// ```rust
 /// use tracerr::Traced;
