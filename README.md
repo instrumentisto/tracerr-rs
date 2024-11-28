@@ -35,9 +35,9 @@ assert_eq!(
     r"my error
 error trace:
 rust_out
-  at src/../README.md:7
+  at src/lib.rs:7
 rust_out
-  at src/../README.md:10",
+  at src/lib.rs:10",
 );
 
 let (val, trace) = err.split();
@@ -47,9 +47,9 @@ assert_eq!(
     r"my error
 error trace:
 rust_out
-  at src/../README.md:7
+  at src/lib.rs:7
 rust_out
-  at src/../README.md:10",
+  at src/lib.rs:10",
 );
 ```
 
