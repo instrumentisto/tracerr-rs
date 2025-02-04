@@ -5,7 +5,7 @@ use std::{
     ops::{Deref, DerefMut},
 };
 
-use derive_more::Display;
+use derive_more::with_trait::Display;
 
 /// Captured frame of [`Trace`].
 #[derive(Clone, Copy, Debug, Display)]

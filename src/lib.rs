@@ -158,7 +158,7 @@ use std::{
     sync::atomic::{AtomicUsize, Ordering},
 };
 
-use derive_more::{AsMut, AsRef, Display};
+use derive_more::with_trait::{AsMut, AsRef, Display};
 use sealed::sealed;
 
 #[doc(inline)]
