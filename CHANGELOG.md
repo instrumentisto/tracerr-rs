@@ -6,6 +6,19 @@ All user visible changes to this project will be documented in this file. This p
 
 
 
+## main
+
+[Diff](https://github.com/instrumentisto/tracerr-rs/compare/v0.4.0...main)
+
+### BC Breaks
+
+- Set [MSRV] to [1.85.0](https://blog.rust-lang.org/2025/02/20/Rust-1.85.0.html). ([todo])
+
+[todo]: https://github.com/instrumentisto/tracerr-rs/commit/todo
+
+
+
+
 ## [0.4.0] · 2025-02-04
 [0.4.0]: https://github.com/instrumentisto/tracerr-rs/tree/v0.4.0
 

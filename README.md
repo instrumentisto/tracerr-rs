@@ -2,7 +2,7 @@ tracerr
 =======
 
 [![crates.io](https://img.shields.io/crates/v/tracerr.svg "crates.io")](https://crates.io/crates/tracerr)
-[![Rust 1.75+](https://img.shields.io/badge/rustc-1.75+-lightgray.svg "Rust 1.75+")](https://blog.rust-lang.org/2023/12/28/Rust-1.75.0.html)
+[![Rust 1.85+](https://img.shields.io/badge/rustc-1.85+-lightgray.svg "Rust 1.85+")](https://blog.rust-lang.org/2025/02/20/Rust-1.85.0.html)
 [![Unsafe Forbidden](https://img.shields.io/badge/unsafe-forbidden-success.svg)](https://github.com/rust-secure-code/safety-dance)  
 [![CI](https://github.com/instrumentisto/tracerr-rs/actions/workflows/ci.yml/badge.svg?branch=main "CI")](https://github.com/instrumentisto/tracerr-rs/actions?query=workflow%3ACI+branch%3Amain)
 [![Rust docs](https://docs.rs/tracerr/badge.svg "Rust docs")](https://docs.rs/tracerr)
@@ -35,9 +35,9 @@ assert_eq!(
     r"my error
 error trace:
 rust_out
-  at src/lib.rs:7
+  at src/../README.md:7
 rust_out
-  at src/lib.rs:10",
+  at src/../README.md:10",
 );
 
 let (val, trace) = err.split();
@@ -47,9 +47,9 @@ assert_eq!(
     r"my error
 error trace:
 rust_out
-  at src/lib.rs:7
+  at src/../README.md:7
 rust_out
-  at src/lib.rs:10",
+  at src/../README.md:10",
 );
 ```
 

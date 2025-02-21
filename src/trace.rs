@@ -25,11 +25,7 @@ pub struct Frame {
 #[macro_export]
 macro_rules! new_frame {
     () => {
-        $crate::Frame {
-            file: file!(),
-            line: line!(),
-            module: module_path!(),
-        }
+        $crate::Frame { file: file!(), line: line!(), module: module_path!() }
     };
 }
 
@@ -76,11 +72,7 @@ mod frame_spec {
 
     #[test]
     fn displays_module_followed_by_file_and_line() {
-        let frame = Frame {
-            file: "my_file.rs",
-            line: 32,
-            module: "main::sub",
-        };
+        let frame = Frame { file: "my_file.rs", line: 32, module: "main::sub" };
 
         assert_eq!(frame.to_string(), "main::sub\n  at my_file.rs:32");
     }
@@ -93,21 +85,13 @@ mod trace_spec {
     #[test]
     fn displays_frames_separated_by_blank_line() {
         let stack = Trace(vec![
-            Frame {
-                file: "src/my_file.rs",
-                line: 32,
-                module: "main::sub1",
-            },
+            Frame { file: "src/my_file.rs", line: 32, module: "main::sub1" },
             Frame {
                 file: "anywhere/my_file.rs",
                 line: 54,
                 module: "main::sub2",
             },
-            Frame {
-                file: "file.rs",
-                line: 232,
-                module: "main::sub3",
-            },
+            Frame { file: "file.rs", line: 232, module: "main::sub3" },
         ]);
 
         assert_eq!(

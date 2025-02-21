@@ -1,8 +1,8 @@
 [package]
 name = "tracerr"
 version = "0.4.0"
-edition = "2021"
-rust-version = "1.75"
+edition = "2024"
+rust-version = "1.85"
 description = "Custom compile-time captured error tracing."
 authors = ["Instrumentisto Team <developer@instrumentisto.com>"]
 license = "BlueOak-1.0.0"
