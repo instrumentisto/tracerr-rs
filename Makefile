@@ -92,9 +92,7 @@ ifeq ($(shell rustup component list --toolchain=nightly \
 	rustup component add --toolchain=nightly rust-src
 endif
 endif
-	cargo $(if $(call eq,$(careful),yes),+nightly careful,) test --all-features\
-		$(if $(call eq,$(careful),yes),--lib,)
-# TODO: Remove on 1.86 Rust upgrade:   ^^^^^
+	cargo $(if $(call eq,$(careful),yes),+nightly careful,) test --all-features
 
 
 

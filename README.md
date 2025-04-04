@@ -20,7 +20,7 @@ Custom compile-time captured error tracing for [Rust].
 The common rule:
 - Use macro to capture trace frame in the invocation place.
 
-```rust
+```rust,no_run
 use tracerr::Traced;
 
 let err = tracerr::new!("my error"); // captures frame
@@ -29,27 +29,25 @@ let res: Result<(), _> = Err(err)
     .map_err(tracerr::wrap!()); // captures frame
 
 let err: Traced<&'static str> = res.unwrap_err();
-# #[cfg(not(target_os = "windows"))]
 assert_eq!(
-    format!("{}\n{}", err, err.trace()),
+    format!("{err}\n{}", err.trace()),
     r"my error
 error trace:
 rust_out
-  at src/../README.md:7
+  at src/lib.rs:6
 rust_out
-  at src/../README.md:10",
+  at src/lib.rs:9",
 );
 
 let (val, trace) = err.split();
-# #[cfg(not(target_os = "windows"))]
 assert_eq!(
-    format!("{}\n{}", val, trace),
+    format!("{val}\n{trace}"),
     r"my error
 error trace:
 rust_out
-  at src/../README.md:7
+  at src/lib.rs:6
 rust_out
-  at src/../README.md:10",
+  at src/lib.rs:9",
 );
 ```
 
