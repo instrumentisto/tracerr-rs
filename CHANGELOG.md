@@ -12,9 +12,9 @@ All user visible changes to this project will be documented in this file. This p
 
 ### BC Breaks
 
-- Set [MSRV] to [1.85.0](https://blog.rust-lang.org/2025/02/20/Rust-1.85.0.html). ([todo])
+- Set [MSRV] to [1.85.0](https://blog.rust-lang.org/2025/02/20/Rust-1.85.0.html). ([bd17ccb2])
 
-[todo]: https://github.com/instrumentisto/tracerr-rs/commit/todo
+[bd17ccb2]: https://github.com/instrumentisto/tracerr-rs/commit/bd17ccb23ee90ff81900d51ca86d7056f96a7f81
 
 
 
